@@ -1,39 +1,50 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ItemsController;
 
 /**
- * ==========1===========
- * unprotected routes for user registration and login
+ * =============================
+ * Public routes (no token)
+ * =============================
  */
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+
 /**
- * =========2===========
- * protected routes, only accessible with valid token
+ * =============================
+ * Protected routes (requires token)
+ * =============================
  */
 Route::middleware('auth:sanctum')->group(function () {
+
     /**
-     * =========3===========
-     * User logout route
+     * User logout
      */
     Route::post('logout', [AuthController::class, 'logout']);
 
     /**
-     * =========4===========
-     * Books CRUD routes
+     * Books CRUD
      */
     Route::apiResource('books', BooksController::class);
 
     /**
-     * =========5===========
-     * Return or borrow books
+     * Borrow / Return a book
      */
     Route::put('books/{id}/borrow-return', [BooksController::class, 'borrowReturn']);
+
+    /**
+     * Categories CRUD
+     */
+    Route::apiResource('categories', CategoriesController::class);
+
+    /**
+     * Items CRUD (TP requirement)
+     */
+    Route::apiResource('items', ItemsController::class);
 });
-
-
